@@ -1,0 +1,76 @@
+<configuration debug="false">
+  <property name="WEB_ROOT" value="${jets-mayapada-smi-gprs.root}" />
+  
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- encoders are assigned the type
+         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+    <encoder>
+      <pattern>%date{HH:mm:ss.SSS} [%thread] %.-5level %logger{0} - %msg%n</pattern>
+    </encoder>
+  </appender>
+	
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${WEB_ROOT}/WEB-INF/logs/server_trx_gprs.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>${WEB_ROOT}/WEB-INF/logs/server_trx_gprs-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <!-- or whenever the file size reaches 100MB -->
+        <maxFileSize>100MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <!-- Keep 5 periods based on daily rollover -->
+	  <maxHistory>5</maxHistory>  
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%date{dd-MMM HH:mm:ss.SSS} [%thread] %.-5level %logger{35} - %msg%n</pattern>
+    </encoder>
+  </appender> 
+     
+  <appender name="SMI_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${WEB_ROOT}/WEB-INF/logs/apps_smi_gprs.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>${WEB_ROOT}/WEB-INF/logs/apps_smi_gprs-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+            class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <!-- or whenever the file size reaches 100MB -->
+        <maxFileSize>100MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <!-- Keep 5 periods based on daily rollover -->
+      <maxHistory>5</maxHistory>  
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%date{dd-MMM HH:mm:ss.SSS} [%thread] %.-5level %logger{0} - %msg%n</pattern>
+    </encoder>
+  </appender> 
+  
+
+  <logger name="smi.transaction" level="DEBUG" additivity="false">
+    <appender-ref ref="SMI_FILE" />
+    <appender-ref ref="STDOUT" />
+  </logger>
+  
+  <logger name="com.emobile.jets" level="DEBUG" additivity="false">
+    <appender-ref ref="SMI_FILE" />
+    <appender-ref ref="STDOUT" />
+  </logger>
+  
+  <logger name="org.springframework" level="DEBUG" additivity="false">
+    <appender-ref ref="FILE" />
+    <appender-ref ref="STDOUT" />
+  </logger>
+  
+  <logger name="org.springframework.beans.factory" level="INFO" additivity="false">
+    <appender-ref ref="FILE" />
+    <appender-ref ref="STDOUT" />
+  </logger>
+  
+  <root level="WARN">
+  	<appender-ref ref="FILE" />
+    <appender-ref ref="STDOUT" />
+  </root>
+  
+</configuration>
